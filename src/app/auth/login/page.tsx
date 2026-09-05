@@ -30,7 +30,7 @@ export default function LoginPage() {
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+      background: "linear-gradient(135deg, #1890ff 0%, #1890ff 100%)",
       padding: "20px",
     }}>
       <Card
@@ -47,7 +47,7 @@ export default function LoginPage() {
             width: 80,
             height: 80,
             borderRadius: "50%",
-            background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+            background: "#1890ff",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -56,7 +56,7 @@ export default function LoginPage() {
             <span style={{ fontSize: 40, color: "white" }}>🏥</span>
           </div>
           <h1 style={{ fontSize: 24, fontWeight: "bold", margin: 0, color: "#333" }}>
-            RSI Undayani
+            RSUDAYANI
           </h1>
           <p style={{ color: "#666", margin: "8px 0 0" }}>
             Sistem Manajemen Kepegawaian
@@ -117,7 +117,7 @@ export default function LoginPage() {
 
         <div style={{ textAlign: "center", marginTop: 24, color: "#999", fontSize: 12 }}>
           <p style={{ margin: 0 }}>
-            Demo: admin@test.com / admin123
+            Hubungi admin untuk akun login
           </p>
         </div>
       </Card>
