@@ -1,5 +1,16 @@
 # 📋 Aturan Deploy ke Vercel
 
+## 🔑 AKUN & BROWSER YANG BENAR
+
+### ✅ WAJIB PAKAI:
+- **Browser:** Mozilla Firefox (Chrome beda akun!)
+- **Akun Vercel:** Login di browser Firefox
+- **URL Dashboard:** https://vercel.com/rsudayani/rsudayani/deployments
+- **Team/Account:** `rsudayani`
+- **Project Name:** `rsudayani`
+
+---
+
 ## ❌ YANG TIDAK BOLEH
 
 ### 1. Jangan Pakai `ssr: false` di Server Component
@@ -93,6 +104,38 @@ mkdir -p public
 
 ---
 
+## 🚀 LANGKAH DEPLOY (WAJIB IKUT URUTAN)
+
+### **BROWSER: Mozilla Firefox**
+⚠️ JANGAN pakai Chrome! Chrome beda akun Vercel!
+
+### **Langkah 1:** Buka Vercel Dashboard
+Buka di **Mozilla Firefox**: https://vercel.com/rsudayani/rsudayani/deployments
+
+### **Langkah 2:** Buat Deploy Baru
+1. Klik **"Add New..."** → **"Project"**
+2. Pilih **"Import Git Repository"**
+3. Cari repository: `rsudayani01-hue/rsudayani`
+4. Klik **Import**
+
+### **Langkah 3:** Configure Project
+Biarkan default (Next.js auto-detect), scroll ke bawah
+
+### **Langkah 4:** Set Environment Variables
+Klik **"Environment Variables"** → Tambahkan:
+
+| Name | Value |
+|------|-------|
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://bqbmladzagiqlhvehifx.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxYm1sYWR6YWdpcWxodmVoaWZ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1OTIwODYsImV4cCI6MjEwNDE2ODA4Nn0.TlKVA9Ac4tqho1Xp2TIIKLbkjyHpJr2mbZ3-IGeXYHQ` |
+| `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` | `o8gp3zvb` |
+| `NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET` | `rsudayani_dokumen` |
+
+### **Langkah 5:** Deploy
+Klik **"Deploy"** → Tunggu ~3-5 menit
+
+---
+
 ## 🔄 Alur Deploy yang Benar
 
 ```
@@ -102,15 +145,17 @@ mkdir -p public
        ↓
 3. git push origin master
        ↓
-4. Vercel auto-detect perubahan
+4. Buka Mozilla Firefox → https://vercel.com/rsudayani/rsudayani
        ↓
-5. Vercel jalan: npm install
+5. Klik "Add New..." → "Project" → Import Git
        ↓
-6. Vercel jalan: npm run build
+6. Import repository rsudayani01-hue/rsudayani
        ↓
-7. Vercel deploy output/.next
+7. Set Environment Variables
        ↓
-8. ✅ Berhasil!
+8. Klik Deploy
+       ↓
+9. ✅ Berhasil!
 ```
 
 ---
@@ -123,6 +168,7 @@ mkdir -p public
 - [ ] `RefineProvider` wrap children di `layout.tsx`
 - [ ] Component yang pakai hooks (useLogout, useGetIdentity) pakai dynamic import dengan `ssr: false` di client component
 - [ ] Tidak ada `ssr: false` langsung di Server Component
+- [ ] Pakai **Mozilla Firefox** untuk deploy (bukan Chrome!)
 
 ---
 
@@ -141,7 +187,10 @@ mkdir -p public
 → Buat folder `public/`
 
 ### "Could not resolve host"
-→ Cek koneksi internet, atau pakai token GitHub di remote URL
+→ Cek koneksi internet
+
+### "Wrong Account"
+→ PASTIKAN PAKAI MOZILLA FIREFOX! Chrome beda akun!
 
 ---
 
@@ -164,3 +213,12 @@ rsudayani/
 │       ├── providers.tsx     ← RefineProvider + QueryClientProvider
 │       └── AdminLayoutWrapper.tsx  ← Client component dengan dynamic import
 ```
+
+---
+
+## 📝 Catatan Penting
+
+- **Browser:** Mozilla Firefox (WAJIB)
+- **Account:** rsudayani (Team)
+- **Project:** rsudayani
+- **GitHub:** rsudayani01-hue/rsudayani
