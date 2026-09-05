@@ -98,6 +98,7 @@ export default function PegawaiListPage() {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchData();
   }, [pagination.current, pagination.pageSize, user]);

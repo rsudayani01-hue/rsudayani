@@ -88,7 +88,7 @@ export default function UsersPage() {
   const columns = [
     { title: "Nama", dataIndex: "name", key: "name" },
     { title: "Email", dataIndex: "email", key: "email" },
-    { title: "Role", dataIndex: "role_type", key: "role", render: (role: string) => <Tag color={getRoleColor(role)}>{getRoleLabel(role)}</Tag> },
+    { title: "Role", dataIndex: "role_type", key: "role", render: (role: string) => <Tag color={getRoleColor(role as any)}>{getRoleLabel(role as any)}</Tag> },
     { title: "Kategori", dataIndex: "kategori_nakes", key: "kategori", render: (k: string) => k || "-" },
     {
       title: "Aksi",
