@@ -1,8 +1,8 @@
-# 🏥 Sistem Manajemen Data Pegawai - RSI Undayani
+# 🏥 Sistem Manajemen Data Pegawai - RSUDAYANI
 
 ## 📋 Deskripsi Proyek
 
-Sistem manajemen data pegawai berbasis web untuk **Rumah Sakit Islam Undayani (RSI Undayani)** dengan fitur:
+Sistem manajemen data pegawai berbasis web untuk **RSUDAYANI (RSUDAYANI)** dengan fitur:
 - CRUD data pegawai
 - Upload & management dokumen
 - Dashboard statistik

@@ -78,7 +78,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       >
         <div style={{ height: 64, display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
           <Text strong style={{ color: "#fff", fontSize: 14, whiteSpace: "nowrap" }}>
-            {collapsed ? "RSU" : "RSI UNDAYANI"}
+            {collapsed ? "RSU" : "RSUDAYANI"}
           </Text>
         </div>
         <Menu 
