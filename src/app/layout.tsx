@@ -6,8 +6,8 @@ import { Providers } from "@/components/providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "RSI Undayani - Sistem Manajemen Kepegawaian",
-  description: "Sistem manajemen data kepegawaian RSI Undayani",
+  title: "RSUDAYANI - Sistem Manajemen Kepegawaian",
+  description: "Sistem manajemen data kepegawaian RSUDAYANI",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -18,10 +18,6 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
-  isSuperAdmin: () => boolean;
-  isAdminKategori: () => boolean;
-  isAdminUnit: () => boolean;
-  isUser: () => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,19 +26,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Load user dari localStorage saat mount
   useEffect(() => {
+    // Load user dari localStorage
     const savedUser = localStorage.getItem("hrbase_user");
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (e) {
+        console.error("Failed to parse saved user:", e);
+      }
     }
     setLoading(false);
   }, []);
 
-  // Login function
   const login = async (email: string, password: string) => {
+    console.log("Login attempt:", email);
+    
     try {
-      // Cek user di tabel users
       const { data, error } = await supabase
         .from("users")
         .select("*")
@@ -50,17 +50,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .eq("is_aktif", true)
         .single();
 
-      if (error || !data) {
+      console.log("Query result:", { data, error });
+
+      if (error) {
+        console.error("Supabase error:", error);
+        return { success: false, error: "Gagal terhubung ke database. Cek koneksi." };
+      }
+
+      if (!data) {
         return { success: false, error: "Email tidak ditemukan atau akun nonaktif" };
       }
 
-      // Simple password check
-      // NOTE: Untuk production, gunakan password hash!
+      // Password check
       if (data.password !== password) {
         return { success: false, error: "Password salah" };
       }
 
-      // Simpan user ke state & localStorage
       const userData: User = {
         id: data.id,
         name: data.name,
@@ -76,36 +81,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       return { success: true };
     } catch (err) {
-      console.error("Login error:", err);
-      return { success: false, error: "Terjadi kesalahan saat login" };
+      console.error("Login catch error:", err);
+      return { success: false, error: "Terjadi kesalahan: " + (err as Error).message };
     }
   };
 
-  // Logout function
   const logout = async () => {
     setUser(null);
     localStorage.removeItem("hrbase_user");
   };
 
-  // Role check functions
-  const isSuperAdmin = () => user?.role_type === "super_admin";
-  const isAdminKategori = () => user?.role_type === "admin_kategori";
-  const isAdminUnit = () => user?.role_type === "admin_unit";
-  const isUser = () => user?.role_type === "user";
-
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        loading,
-        login,
-        logout,
-        isSuperAdmin,
-        isAdminKategori,
-        isAdminUnit,
-        isUser,
-      }}
-    >
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
