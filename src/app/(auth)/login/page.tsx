@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { Form, Input, Button, Card, message, App } from "antd";
-import { UserOutlined, LockOutlined, HospitalIcon } from "@ant-design/icons";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -42,7 +42,6 @@ export default function LoginPage() {
         }}
         styles={{ body: { padding: 40 } }}
       >
-        {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 32 }}>
           <div style={{
             width: 80,
@@ -54,14 +53,9 @@ export default function LoginPage() {
             justifyContent: "center",
             margin: "0 auto 16px",
           }}>
-            <HospitalIcon style={{ fontSize: 40, color: "white" }} />
+            <span style={{ fontSize: 40, color: "white" }}>🏥</span>
           </div>
-          <h1 style={{ 
-            fontSize: 24, 
-            fontWeight: "bold", 
-            margin: 0,
-            color: "#333"
-          }}>
+          <h1 style={{ fontSize: 24, fontWeight: "bold", margin: 0, color: "#333" }}>
             RSI Undayani
           </h1>
           <p style={{ color: "#666", margin: "8px 0 0" }}>
@@ -69,7 +63,6 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Form */}
         <App>
           <Form
             name="login"
@@ -122,13 +115,7 @@ export default function LoginPage() {
           </Form>
         </App>
 
-        {/* Footer */}
-        <div style={{ 
-          textAlign: "center", 
-          marginTop: 24,
-          color: "#999",
-          fontSize: 12 
-        }}>
+        <div style={{ textAlign: "center", marginTop: 24, color: "#999", fontSize: 12 }}>
           <p style={{ margin: 0 }}>
             Demo: admin@test.com / admin123
           </p>
