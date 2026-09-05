@@ -216,11 +216,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Avatar style={{ backgroundColor: "#1677ff" }} icon={<UserOutlined />} />
               <div>
                 <Text style={{ fontSize: 14, display: "block" }}>{user.name}</Text>
-                <Text 
-                  type="secondary" 
-                  style={{ fontSize: 11 }}
-                  style={{ 
-                    fontSize: 11, 
+                <Text
+                  style={{
+                    fontSize: 11,
                     color: getRoleColor(user.role_type) === "red" ? "#ff4d4f" :
                            getRoleColor(user.role_type) === "orange" ? "#fa8c16" :
                            getRoleColor(user.role_type) === "blue" ? "#1677ff" : "#52c41a"
