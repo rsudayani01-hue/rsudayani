@@ -31,14 +31,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push("/(auth)/login");
+      router.push("/auth/login");
     }
   }, [user, loading, router]);
 
   const handleLogout = async () => {
     await logout();
     message.success("Logout berhasil!");
-    router.push("/(auth)/login");
+    router.push("/auth/login");
   };
 
   const menuItems: MenuProps["items"] = [

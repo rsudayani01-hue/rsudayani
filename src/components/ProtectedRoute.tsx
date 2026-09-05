@@ -18,7 +18,7 @@ export default function ProtectedRoute({ children, allowedRoles }: ProtectedRout
     if (!loading) {
       // Kalau belum login, redirect ke login
       if (!user) {
-        router.push("/(auth)/login");
+        router.push("/auth/login");
         return;
       }
 
