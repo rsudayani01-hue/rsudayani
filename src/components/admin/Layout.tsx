@@ -6,7 +6,6 @@ import {
   DashboardOutlined, 
   UserOutlined, 
   TeamOutlined, 
-  FileTextOutlined, 
   CalendarOutlined,
   ClockCircleOutlined,
   SettingOutlined,
@@ -21,9 +20,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { getRoleLabel, getRoleColor } from "@/lib/roles";
 import type { MenuProps } from "antd";
 
-const { Header, Sider, Content } = AntdLayout;
+const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
-const { Sider: AntdSider } = Layout;
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const { user, logout, loading } = useAuth();
@@ -31,7 +29,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
 
-  // Redirect to login if not authenticated
   useEffect(() => {
     if (!loading && !user) {
       router.push("/(auth)/login");
@@ -44,132 +41,46 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     router.push("/(auth)/login");
   };
 
-  // Menu items based on role
   const menuItems: MenuProps["items"] = [
-    {
-      key: "/admin/dashboard",
-      icon: <DashboardOutlined />,
-      label: "Dashboard",
-    },
-    {
-      key: "/admin/pegawai",
-      icon: <TeamOutlined />,
-      label: "Data Pegawai",
-    },
-    {
-      key: "/admin/diklat",
-      icon: <BookOutlined />,
-      label: "Pelatihan",
-    },
-    {
-      key: "/admin/unit-kerja",
-      icon: <SettingOutlined />,
-      label: "Unit Kerja",
-    },
-    {
-      key: "/admin/jadwal-dinas",
-      icon: <CalendarOutlined />,
-      label: "Jadwal Dinas",
-    },
-    {
-      key: "/admin/shift-template",
-      icon: <ClockCircleOutlined />,
-      label: "Template Shift",
-    },
-    // Super Admin only
+    { key: "/admin/dashboard", icon: <DashboardOutlined />, label: "Dashboard" },
+    { key: "/admin/pegawai", icon: <TeamOutlined />, label: "Data Pegawai" },
+    { key: "/admin/diklat", icon: <BookOutlined />, label: "Pelatihan" },
+    { key: "/admin/unit-kerja", icon: <SettingOutlined />, label: "Unit Kerja" },
+    { key: "/admin/jadwal-dinas", icon: <CalendarOutlined />, label: "Jadwal Dinas" },
+    { key: "/admin/shift-template", icon: <ClockCircleOutlined />, label: "Template Shift" },
     ...(user?.role_type === "super_admin" ? [
-      {
-        key: "admin-divider",
-        type: "divider",
-      },
-      {
-        key: "/admin/users",
-        icon: <SafetyOutlined />,
-        label: "Kelola User",
-      },
+      { type: "divider" as const },
+      { key: "/admin/users", icon: <SafetyOutlined />, label: "Kelola User" },
     ] : []),
   ];
 
   const userMenuItems: MenuProps["items"] = [
-    {
-      key: "profile",
-      icon: <UserOutlined />,
-      label: "Profil Saya",
-      disabled: true,
-    },
-    {
-      type: "divider",
-    },
-    {
-      key: "logout",
-      icon: <LogoutOutlined />,
-      label: "Logout",
-      danger: true,
-    },
+    { key: "logout", icon: <LogoutOutlined />, label: "Logout", danger: true },
   ];
 
-  const handleMenuClick: MenuProps["onClick"] = ({ key }) => {
-    if (key === "logout") {
-      handleLogout();
-    } else if (key.startsWith("/")) {
-      router.push(key);
-    }
-  };
-
-  // Loading state
   if (loading) {
     return (
-      <div style={{ 
-        display: "flex", 
-        justifyContent: "center", 
-        alignItems: "center", 
-        height: "100vh" 
-      }}>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
         <Spin size="large" tip="Memuat..." />
       </div>
     );
   }
 
-  // Not authenticated
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <AntdSider 
+      <Sider 
         trigger={null} 
         collapsible 
         collapsed={collapsed} 
-        style={{ 
-          background: "#001529", 
-          position: "fixed", 
-          left: 0, 
-          top: 0, 
-          bottom: 0, 
-          zIndex: 100,
-          overflow: "auto",
-        }}
+        style={{ background: "#001529", position: "fixed", left: 0, top: 0, bottom: 0, zIndex: 100, overflow: "auto" }}
       >
-        {/* Logo */}
-        <div style={{ 
-          height: 64, 
-          display: "flex", 
-          alignItems: "center", 
-          justifyContent: "center", 
-          borderBottom: "1px solid rgba(255,255,255,0.1)",
-          padding: collapsed ? "0 8px" : "0 16px",
-        }}>
-          {collapsed ? (
-            <Text strong style={{ color: "#fff", fontSize: 18 }}>RSU</Text>
-          ) : (
-            <Text strong style={{ color: "#fff", fontSize: 14, whiteSpace: "nowrap" }}>
-              RSI UNDAYANI
-            </Text>
-          )}
+        <div style={{ height: 64, display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
+          <Text strong style={{ color: "#fff", fontSize: 14, whiteSpace: "nowrap" }}>
+            {collapsed ? "RSU" : "RSI UNDAYANI"}
+          </Text>
         </div>
-
-        {/* Menu */}
         <Menu 
           theme="dark" 
           mode="inline" 
@@ -177,11 +88,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           items={menuItems}
           onClick={({ key }) => key.startsWith("/") && router.push(key)}
         />
-      </AntdSider>
+      </Sider>
 
-      {/* Main Content */}
       <Layout style={{ marginLeft: collapsed ? 80 : 200, transition: "margin-left 0.2s" }}>
-        {/* Header */}
         <Header style={{ 
           padding: "0 24px", 
           background: "#fff", 
@@ -195,35 +104,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           height: 64,
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <div 
-              onClick={() => setCollapsed(!collapsed)}
-              style={{ cursor: "pointer", fontSize: 18 }}
-            >
+            <div onClick={() => setCollapsed(!collapsed)} style={{ cursor: "pointer", fontSize: 18 }}>
               {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             </div>
             <Text strong style={{ fontSize: 16 }}>Sistem Manajemen Kepegawaian</Text>
           </div>
-
-          {/* User Dropdown */}
           <Dropdown 
-            menu={{ 
-              items: userMenuItems, 
-              onClick: handleMenuClick 
-            }} 
+            menu={{ items: userMenuItems, onClick: ({ key }) => key === "logout" && handleLogout() }} 
             placement="bottomRight"
           >
             <div style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
               <Avatar style={{ backgroundColor: "#1677ff" }} icon={<UserOutlined />} />
               <div>
                 <Text style={{ fontSize: 14, display: "block" }}>{user.name}</Text>
-                <Text
-                  style={{
-                    fontSize: 11,
-                    color: getRoleColor(user.role_type) === "red" ? "#ff4d4f" :
-                           getRoleColor(user.role_type) === "orange" ? "#fa8c16" :
-                           getRoleColor(user.role_type) === "blue" ? "#1677ff" : "#52c41a"
-                  }}
-                >
+                <Text style={{ fontSize: 11, color: getRoleColor(user.role_type) === "red" ? "#ff4d4f" : "#666" }}>
                   {getRoleLabel(user.role_type)}
                 </Text>
               </div>
@@ -231,15 +125,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </Dropdown>
         </Header>
 
-        {/* Page Content */}
-        <Content style={{ 
-          margin: 24, 
-          padding: 24, 
-          background: "#fff", 
-          borderRadius: 8, 
-          minHeight: "calc(100vh - 112px)",
-          overflow: "auto",
-        }}>
+        <Content style={{ margin: 24, padding: 24, background: "#fff", borderRadius: 8, minHeight: "calc(100vh - 112px)", overflow: "auto" }}>
           {children}
         </Content>
       </Layout>
