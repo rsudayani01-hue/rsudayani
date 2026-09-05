@@ -41,49 +41,90 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     console.log("Login attempt:", email);
-    
-    try {
-      const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("email", email)
-        .eq("is_aktif", true)
-        .single();
 
-      console.log("Query result:", { data, error });
+    // Retry logic for network issues
+    const maxRetries = 2;
+    let lastError: any = null;
 
-      if (error) {
-        console.error("Supabase error:", error);
-        return { success: false, error: "Gagal terhubung ke database. Cek koneksi." };
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        // Clear any stale session state before retry
+        if (attempt > 0) {
+          console.log(`Retry attempt ${attempt}...`);
+          await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+        }
+
+        const { data, error } = await supabase
+          .from("users")
+          .select("*")
+          .eq("email", email)
+          .eq("is_aktif", true)
+          .single();
+
+        console.log("Query result:", { data, error, attempt });
+
+        if (error) {
+          console.error("Supabase error:", error);
+
+          // Check if it's a network-related error
+          const errorMsg = error.message || '';
+          if (
+            errorMsg.includes('NetworkError') ||
+            errorMsg.includes('fetch') ||
+            errorMsg.includes('network') ||
+            error.code === '' ||
+            error.details === ''
+          ) {
+            lastError = { isNetworkError: true, message: "Gagal terhubung ke database. Cek koneksi internet Anda." };
+            continue; // Retry
+          }
+
+          return { success: false, error: "Gagal terhubung ke database. " + error.message };
+        }
+
+        if (!data) {
+          return { success: false, error: "Email tidak ditemukan atau akun nonaktif" };
+        }
+
+        // Password check
+        if (data.password !== password) {
+          return { success: false, error: "Password salah" };
+        }
+
+        const userData: User = {
+          id: data.id,
+          name: data.name,
+          email: data.email,
+          role_type: data.role_type,
+          kategori_nakes: data.kategori_nakes,
+          unit_kerja: data.unit_kerja,
+          pegawai_id: data.pegawai_id,
+        };
+
+        setUser(userData);
+        localStorage.setItem("hrbase_user", JSON.stringify(userData));
+
+        return { success: true };
+      } catch (err) {
+        console.error("Login catch error:", err, { attempt });
+
+        // Check if it's a network error
+        const errorMessage = (err as Error).message || '';
+        if (errorMessage.includes('NetworkError') || errorMessage.includes('fetch') || errorMessage.includes('network')) {
+          lastError = { isNetworkError: true, message: "Gagal terhubung ke database. Cek koneksi internet Anda." };
+          continue; // Retry
+        }
+
+        return { success: false, error: "Terjadi kesalahan: " + errorMessage };
       }
-
-      if (!data) {
-        return { success: false, error: "Email tidak ditemukan atau akun nonaktif" };
-      }
-
-      // Password check
-      if (data.password !== password) {
-        return { success: false, error: "Password salah" };
-      }
-
-      const userData: User = {
-        id: data.id,
-        name: data.name,
-        email: data.email,
-        role_type: data.role_type,
-        kategori_nakes: data.kategori_nakes,
-        unit_kerja: data.unit_kerja,
-        pegawai_id: data.pegawai_id,
-      };
-
-      setUser(userData);
-      localStorage.setItem("hrbase_user", JSON.stringify(userData));
-
-      return { success: true };
-    } catch (err) {
-      console.error("Login catch error:", err);
-      return { success: false, error: "Terjadi kesalahan: " + (err as Error).message };
     }
+
+    // All retries failed
+    if (lastError?.isNetworkError) {
+      return { success: false, error: lastError.message };
+    }
+
+    return { success: false, error: "Gagal terhubung ke database setelah beberapa percobaan." };
   };
 
   const logout = async () => {
