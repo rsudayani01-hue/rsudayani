@@ -1,0 +1,38 @@
+{
+  "name": "rsudayani",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.3.0",
+    "@ant-design/nextjs-registry": "^1.0.1",
+    "@refinedev/antd": "^5.37.6",
+    "@refinedev/core": "^4.46.1",
+    "@refinedev/react-router-v6": "^4.5.0",
+    "@refinedev/supabase": "^5.0.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "antd": "^5.17.0",
+    "axios": "^1.7.0",
+    "dayjs": "^1.11.12",
+    "jspdf": "^2.5.0",
+    "next": "14.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "recharts": "^2.12.0",
+    "xlsx": "^0.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5"
+  }
+}
