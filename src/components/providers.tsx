@@ -1,8 +1,11 @@
 "use client";
-import React, { createContext, useContext, useState, useEffect } from "react";
+
+import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { dataProvider } from "@/lib/dataProvider";
-import { supabase } from "@/lib/supabase";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
+import { ConfigProvider } from "antd";
+import idID from "antd/locale/id_ID";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -14,24 +17,25 @@ const queryClient = new QueryClient({
   },
 });
 
-export interface AuthContextType {
-  role: string | null;
-  name: string | null;
-  isLoading: boolean;
-}
+// Theme config
+const theme = {
+  token: {
+    colorPrimary: "#1890ff",
+    borderRadius: 8,
+    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+  },
+};
 
-export const AuthContext = createContext<AuthContextType>({
-  role: null,
-  name: null,
-  isLoading: true,
-});
-
-export const useAuth = () => useContext(AuthContext);
-
-export function RefineProvider({ children }: { children: React.ReactNode }) {
+export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <QueryClientProvider client={queryClient}>
-      {children}
-    </QueryClientProvider>
+    <AntdRegistry>
+      <ConfigProvider locale={idID} theme={theme}>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </QueryClientProvider>
+      </ConfigProvider>
+    </AntdRegistry>
   );
 }
