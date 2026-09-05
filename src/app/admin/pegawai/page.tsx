@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { 
   Table, 
   Button, 
@@ -11,8 +11,6 @@ import {
   Input, 
   Space,
   Select,
-  Badge,
-  Dropdown,
   Modal,
   message
 } from "antd";
@@ -22,16 +20,12 @@ import {
   EditOutlined, 
   DeleteOutlined, 
   EyeOutlined, 
-  UserOutlined,
-  MoreOutlined,
-  FilterOutlined
+  UserOutlined
 } from "@ant-design/icons";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { KATEGORI_NAKES, STATUS_KEPEGAWAIAN } from "@/lib/roles";
-import type { MenuProps } from "antd";
 
 const { Title, Text } = Typography;
 
@@ -54,7 +48,6 @@ interface Pegawai {
 
 export default function PegawaiListPage() {
   const { user } = useAuth();
-  const router = useRouter();
   const [data, setData] = useState<Pegawai[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState("");
@@ -62,8 +55,7 @@ export default function PegawaiListPage() {
   const [filterStatus, setFilterStatus] = useState<string | null>(null);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
 
-  // Fetch data
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       let query = supabase
@@ -72,7 +64,6 @@ export default function PegawaiListPage() {
         .eq("is_aktif", true)
         .order("nama", { ascending: true });
 
-      // Role-based filtering
       if (user?.role_type === "admin_kategori" && user.kategori_nakes) {
         query = query.eq("kategori_nakes", user.kategori_nakes);
       } else if (user?.role_type === "admin_unit" && user.unit_kerja) {
@@ -96,14 +87,12 @@ export default function PegawaiListPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user, pagination.current, pagination.pageSize]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchData();
-  }, [pagination.current, pagination.pageSize, user]);
+  }, [fetchData]);
 
-  // Delete handler
   const handleDelete = async (id: number) => {
     try {
       const { error } = await supabase
@@ -119,7 +108,6 @@ export default function PegawaiListPage() {
     }
   };
 
-  // Filtered data
   const filteredData = data.filter(item => {
     const matchSearch = searchText === "" || 
       item.nama?.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -133,11 +121,9 @@ export default function PegawaiListPage() {
     return matchSearch && matchKategori && matchStatus;
   });
 
-  // Can edit/delete?
   const canEdit = user?.role_type === "super_admin" || user?.role_type === "admin_kategori" || user?.role_type === "admin_unit";
   const canDelete = user?.role_type === "super_admin";
 
-  // Table columns
   const columns = [
     {
       title: "Nama",
@@ -158,9 +144,7 @@ export default function PegawaiListPage() {
       title: "Kategori",
       dataIndex: "kategori_nakes",
       key: "kategori_nakes",
-      render: (kategori: string) => (
-        <Tag color="blue">{kategori || "-"}</Tag>
-      ),
+      render: (kategori: string) => <Tag color="blue">{kategori || "-"}</Tag>,
     },
     {
       title: "Unit Kerja",
@@ -196,9 +180,7 @@ export default function PegawaiListPage() {
       render: (_: any, record: Pegawai) => (
         <Space>
           <Link href={`/admin/pegawai/${record.id}`}>
-            <Button size="small" icon={<EyeOutlined />}>
-              Detail
-            </Button>
+            <Button size="small" icon={<EyeOutlined />}>Detail</Button>
           </Link>
           {canEdit && (
             <Link href={`/admin/pegawai/${record.id}?edit=true`}>
@@ -225,26 +207,18 @@ export default function PegawaiListPage() {
 
   return (
     <div>
-      {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 24 }}>
         <div>
-          <Title level={3} style={{ margin: 0 }}>
-            👥 Data Pegawai
-          </Title>
-          <Text type="secondary">
-            Total: {pagination.total} pegawai aktif
-          </Text>
+          <Title level={3} style={{ margin: 0 }}>Data Pegawai</Title>
+          <Text type="secondary">Total: {pagination.total} pegawai aktif</Text>
         </div>
         {canEdit && (
           <Link href="/admin/pegawai/create">
-            <Button type="primary" icon={<PlusOutlined />}>
-              Tambah Pegawai
-            </Button>
+            <Button type="primary" icon={<PlusOutlined />}>Tambah Pegawai</Button>
           </Link>
         )}
       </div>
 
-      {/* Filters */}
       <Card size="small" style={{ marginBottom: 16 }}>
         <Space wrap>
           <Input
@@ -274,7 +248,6 @@ export default function PegawaiListPage() {
         </Space>
       </Card>
 
-      {/* Table */}
       <Card>
         <Table
           dataSource={filteredData}

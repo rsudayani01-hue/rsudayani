@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Table, Button, Card, Typography, Tag, Modal, Form, Select, Input, DatePicker, message, Space } from "antd";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { KATEGORI_DIKLAT, TOPIK_KARS } from "@/lib/roles";
@@ -33,16 +32,16 @@ export default function DiklatPage() {
   const [form] = Form.useForm();
   const canEdit = user?.role_type === "super_admin" || user?.role_type === "admin_kategori" || user?.role_type === "admin_unit";
 
-  const fetchPegawai = async () => {
+  const fetchPegawai = useCallback(async () => {
     let query = supabase.from("pegawais").select("id, nama").eq("is_aktif", true).order("nama");
     if (user?.role_type === "admin_kategori" && user.kategori_nakes) {
       query = query.eq("kategori_nakes", user.kategori_nakes);
     }
     const { data: result } = await query;
     setPegawaiList(result || []);
-  };
+  }, [user]);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const { data: result, error } = await supabase
@@ -57,12 +56,12 @@ export default function DiklatPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchPegawai();
     fetchData();
-  }, []);
+  }, [fetchPegawai, fetchData]);
 
   const handleSubmit = async (values: any) => {
     try {
