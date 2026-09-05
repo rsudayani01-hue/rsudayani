@@ -7,8 +7,8 @@ import { RefineProvider } from "@/components/providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "RSI Undayani - Sistem Manajemen Data Pegawai",
-  description: "Sistem manajemen data pegawai RSI Undayani",
+  title: "RSUDAYANI - Sistem Manajemen Data Pegawai",
+  description: "Sistem manajemen data pegawai RSUDAYANI",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

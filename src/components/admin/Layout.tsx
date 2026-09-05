@@ -18,7 +18,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
         <AntdLayout style={{ minHeight: "100vh" }}>
             <Sider trigger={null} collapsible collapsed={collapsed} style={{ background: "#001529", position: "fixed", left: 0, top: 0, bottom: 0, zIndex: 100 }}>
                 <div style={{ height: 64, display: "flex", alignItems: "center", justifyContent: "center", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
-                    <Text strong style={{ color: "#fff", fontSize: collapsed ? 18 : 16 }}>{collapsed ? "RSI" : "RSI Undayani"}</Text>
+                    <Text strong style={{ color: "#fff", fontSize: collapsed ? 18 : 16 }}>{collapsed ? "RSU" : "RSUDAYANI"}</Text>
                 </div>
                 <Menu theme="dark" mode="inline" defaultSelectedKeys={["/admin/dashboard"]} onClick={({ key }) => router.push(key)} items={[
                     { key: "/admin/dashboard", icon: <DashboardOutlined />, label: "Dashboard" },

@@ -26,7 +26,7 @@ export default function DashboardPage() {
 
     return (
         <div>
-            <Title level={3} style={{ marginBottom: 24 }}>📊 Dashboard RSI Undayani</Title>
+            <Title level={3} style={{ marginBottom: 24 }}>📊 Dashboard RSUDAYANI</Title>
             <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
                 <Col xs={24} sm={12} lg={6}><Card><Statistic title="Total Pegawai" value={totalPegawai} prefix={<UserOutlined style={{ color: "#1677ff" }} />} suffix={<Text type="secondary">orang</Text>} /></Card></Col>
                 <Col xs={24} sm={12} lg={6}><Card><Statistic title="Total Dokumen" value={0} prefix={<FileOutlined style={{ color: "#52c41a" }} />} suffix={<Text type="secondary">file</Text>} /></Card></Col>
